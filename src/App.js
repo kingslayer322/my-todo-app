@@ -58,38 +58,7 @@ function App() {
     document.body.className = darkMode ? 'dark-mode' : '';
   }, [darkMode]);
 
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyPress = (e) => {
-      if (e.ctrlKey || e.metaKey) {
-        switch (e.key) {
-          case 'k':
-            e.preventDefault();
-            document.querySelector('.search-input')?.focus();
-            break;
-          case 'n':
-            e.preventDefault();
-            document.querySelector('.task-input')?.focus();
-            break;
-          case 'd':
-            e.preventDefault();
-            setDarkMode(!darkMode);
-            break;
-          case 'a':
-            e.preventDefault();
-            if (selectedTasks.size === filteredAndSortedTasks.length) {
-              setSelectedTasks(new Set());
-            } else {
-              setSelectedTasks(new Set(filteredAndSortedTasks.map(task => task.id)));
-            }
-            break;
-        }
-      }
-    };
 
-    document.addEventListener('keydown', handleKeyPress);
-    return () => document.removeEventListener('keydown', handleKeyPress);
-  }, [darkMode, selectedTasks]);
 
   const addTask = (e) => {
     e.preventDefault();
@@ -187,10 +156,7 @@ function App() {
     }
   };
 
-  const cancelEdit = () => {
-    setEditingId(null);
-    setEditValue('');
-  };
+
 
   const exportTasks = () => {
     const dataStr = JSON.stringify(tasks, null, 2);
@@ -219,14 +185,7 @@ function App() {
     }
   };
 
-  const getPriorityColor = (priority) => {
-    switch (priority) {
-      case 'high': return '#dc3545';
-      case 'medium': return '#ffc107';
-      case 'low': return '#28a745';
-      default: return '#6c757d';
-    }
-  };
+
 
   const getCategoryIcon = (category) => {
     switch (category) {
@@ -343,6 +302,41 @@ function App() {
   };
 
   const stats = getStats();
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      if (e.ctrlKey || e.metaKey) {
+        switch (e.key) {
+          case 'k':
+            e.preventDefault();
+            document.querySelector('.search-input')?.focus();
+            break;
+          case 'n':
+            e.preventDefault();
+            document.querySelector('.task-input')?.focus();
+            break;
+          case 'd':
+            e.preventDefault();
+            setDarkMode(!darkMode);
+            break;
+          case 'a':
+            e.preventDefault();
+            if (selectedTasks.size === filteredAndSortedTasks.length) {
+              setSelectedTasks(new Set());
+            } else {
+              setSelectedTasks(new Set(filteredAndSortedTasks.map(task => task.id)));
+            }
+            break;
+          default:
+            break;
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyPress);
+    return () => document.removeEventListener('keydown', handleKeyPress);
+  }, [darkMode, selectedTasks, filteredAndSortedTasks]);
 
   return (
     <div className={`App ${darkMode ? 'dark' : ''}`}>
